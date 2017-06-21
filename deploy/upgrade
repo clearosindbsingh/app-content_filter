@@ -1,0 +1,25 @@
+#!/bin/sh
+
+
+# Set default filtergroupslist
+#-----------------------------
+
+CHECK=`grep "^filtergroups[[:space:]]*=[[:space:]]*1[[:space:]]*$" /etc/dansguardian-av/dansguardian.conf`
+if [ -n "$CHECK" ]; then
+    logger -p local6.notice -t installer "app-content-filter-core - updating filter groups list"
+    echo "clearos_any_user" > /etc/dansguardian-av/lists/filtergroupslist
+fi
+
+# Change cache directory
+#-----------------------
+
+CHECK=`grep "^filecachedir[[:space:]]*=[[:space:]]*'\/tmp" /etc/dansguardian-av/dansguardian.conf`
+if [ -n "$CHECK" ]; then
+    logger -p local6.notice -t installer "app-content-filter-core - updating cache directory"
+    sed -i -e "s/^filecachedir.*/filecachedir = '\/var\/cache\/dansguardian'/" /etc/dansguardian-av/dansguardian.conf
+fi
+
+# Run network configuration event
+#--------------------------------
+
+/var/clearos/events/network_configuration/content_filter

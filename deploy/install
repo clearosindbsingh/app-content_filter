@@ -1,0 +1,40 @@
+#!/bin/sh
+
+TIMESTAMP=`date "+%b-%d-%Y-%T"`
+
+# Tweak maxlogitemlength - see http://tracker.clearfoundation.com/view.php?id=424
+#-----------------------
+
+CHECK=`grep ^maxlogitemlength /etc/dansguardian-av/dansguardian.conf`
+if [ -z "$CHECK" ]; then
+    logger -p local6.notice -t installer "app-content-filter-core - updating logging policy for long URLs"
+    sed -i -e 's/#[[:space:]]*maxlogitemlength.*/maxlogitemlength = 400/' /etc/dansguardian-av/dansguardian.conf
+fi
+
+# Set default filtergroupslist
+#-----------------------------
+
+logger -p local6.notice -t installer "app-content-filter-core - setting filter groups list"
+echo "clearos_any_user" > /etc/dansguardian-av/lists/filtergroupslist
+
+# Set default configuration
+#--------------------------
+
+logger -p local6.notice -t installer "app-content-filter-core - setting exceptionsitelist configuration"
+
+if [ -e /etc/dansguardian-av/lists/exceptionsitelist ]; then
+    cp /etc/dansguardian-av/lists/exceptionsitelist /var/clearos/content_filter/backup/exceptionsitelist.$TIMESTAMP
+fi
+
+cp /usr/clearos/apps/content_filter/deploy/exceptionsitelist /etc/dansguardian-av/lists/exceptionsitelist
+
+# Set boot policy
+#----------------
+
+logger -p local6.notice -t installer "app-content-filter-core - disabling content filter server"
+/sbin/chkconfig dansguardian-av off >/dev/null 2>&1
+
+# Set tuning
+#-----------
+
+/usr/clearos/apps/content_filter/deploy/auto-tune
