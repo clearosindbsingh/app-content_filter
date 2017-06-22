@@ -157,3 +157,7 @@ $lang['content_filter_very_aggressive'] = 'Очень Агрессивный';
 $lang['content_filter_very_lax'] = 'Очень слабый';
 $lang['content_filter_virus_scan'] = 'Сканирование вирусов';
 $lang['content_filter_web_address'] = 'Веб-адрес';
+$lang['content_filter_thread_report'] = "Content Filter Threads";
+$lang['content_filter_max_children'] = "Max Threads";
+$lang['content_filter_current_process'] = "Threads";
+$lang['content_filter_ooops'] = "Ooops!! Something is wrong";

@@ -59,4 +59,18 @@ class Content_Filter_Dashboard extends ClearOS_Controller
 	$data['currentprocess'] = $this->dansguardian->get_current_process_count();
         $this->page->view_form('content_filter/dashboard/thread_report', $data);
     }
+	/**
+	* Content_Filter Thread Report AJAX.
+	*
+	* @return JSON
+	*/
+	function refresh_thread_data()
+	{
+		$this->lang->load('content_filter');
+		$this->load->library('content_filter/DansGuardian');		
+		$data['maxchildren'] = $this->dansguardian->get_maxchildren();
+		$data['currentprocess'] = $this->dansguardian->get_current_process_count();
+		$data['success'] = true;
+		echo json_encode($data); die;
+	}
 }

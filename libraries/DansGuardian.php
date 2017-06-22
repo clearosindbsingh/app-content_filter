@@ -65,6 +65,7 @@ clearos_load_library('groups/Group_Manager_Factory');
 
 use \clearos\apps\base\Daemon as Daemon;
 use \clearos\apps\base\File as File;
+use \clearos\apps\base\Shell as Shell;
 use \clearos\apps\base\File_Types as File_Types;
 use \clearos\apps\base\Folder as Folder;
 use \clearos\apps\base\Tuning as Tuning;
@@ -77,6 +78,7 @@ use \clearos\apps\network\Role as Role;
 
 clearos_load_library('base/Daemon');
 clearos_load_library('base/File');
+clearos_load_library('base/Shell');
 clearos_load_library('base/File_Types');
 clearos_load_library('base/Folder');
 clearos_load_library('base/Tuning');
@@ -1644,6 +1646,37 @@ class DansGuardian extends Daemon
         }
 
         return $tuning;
+    }
+	/**
+     * Returns Max Children.
+     *
+     * @return number of max children
+     * @throws Engine_Exception
+     */
+	public function get_maxchildren()
+    {
+        clearos_profile(__METHOD__, __LINE__);
+
+        return $this->_get_configuration_value('maxchildren', $policy);
+    }
+	/**
+     * Returns Current Process.
+     *
+     * @return number of running Process
+     * @throws Engine_Exception
+     */
+	public function get_current_process_count()
+    {
+	clearos_profile(__METHOD__, __LINE__);
+	$shell = new Shell();
+        $options['validate_exit_code'] = FALSE;
+        $retval = $shell->execute(
+            "/usr/bin/pgrep","pgrep dansguardian-av | wc -l", false, $options
+        );
+	if ($retval >= 2)
+        	throw new Engine_Exception(lang('content_filter_ooops'));
+        $output = $shell->get_output();
+	return $output[0];
     }
 
     /**

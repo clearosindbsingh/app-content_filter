@@ -40,19 +40,22 @@ $this->lang->load('content_filter');
 ///////////////////////////////////////////////////////////////////////////////
 
 echo form_header(lang('content_filter_thread_report'));
-
-echo field_input('maxchildren', $maxchildren, lang('content_filter_max_children'),array('readonly' => 'readonly'));
-
 echo field_input('currentprocess', $currentprocess, lang('content_filter_current_process'),array('readonly' => 'readonly'));
-
+echo field_input('maxchildren', $maxchildren, lang('content_filter_max_children'),array('readonly' => 'readonly'));
 echo form_footer();
 
 
-// Script below used to display action selected (shutdown or reboot)
+// Script below used to get realtime data of Threads via AJAX
 echo "<script type='text/javascript'>\n";
 echo "  $(document).ready(function() {";
 echo "    setInterval(function(){";
-echo "    })";
+echo "    	$.getJSON('/app/content_filter/content_filter_dashboard/refresh_thread_data',function(data){";
+echo "    		if(data.success){ ";
+echo "    			$('#currentprocess_text').text(data.currentprocess);";
+echo "    			$('#maxchildren_text').text(data.maxchildren);";
+echo "    		}";
+echo "    	});";
+echo "    },2000);";
 echo "  });";
 echo "</script>\n";
 
