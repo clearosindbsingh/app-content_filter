@@ -1693,8 +1693,7 @@ class DansGuardian extends Daemon
 	$shell = new Shell();
         $options['validate_exit_code'] = FALSE;
         $retval = $shell->execute(
-            "/usr/bin/tail","tail -n 5000 $log_file_path | grep www", true, $options
-		//"/usr/bin/tail","tail -n 5000 $log_file_path | grep DENIED", true, $options
+		"/usr/bin/tail","tail -n 5000 $log_file_path | grep DENIED", true, $options
         );
         $output = $shell->get_output();
 	//echo "<pre>"; print_r($output); die;
