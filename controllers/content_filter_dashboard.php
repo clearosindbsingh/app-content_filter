@@ -1,7 +1,7 @@
 <?php
 /**
  * Content filter dashboard controller.
- * // Test comment
+ *
  * @category   apps
  * @package    content-filter
  * @subpackage controllers
@@ -73,16 +73,26 @@ class Content_Filter_Dashboard extends ClearOS_Controller
 		$data['success'] = true;
 		echo json_encode($data); die;
 	}
+	/**
+	* Content_Filter Content Filter Deny View page.
+	*
+	* @return view
+	*/
 	function content_filter_deny()
 	{
 		$this->lang->load('content_filter');
 		$this->load->library('content_filter/DansGuardian');		
-		//$data['maxchildren'] = $this->dansguardian->get_tail_report();
 		$this->page->view_form('content_filter/dashboard/content_filter_deny', $data);
 	}
+	/**
+	* Content_Filter Refresh Deny Data via AJAX.
+	*
+	* @return JSON
+	*/
 	function refresh_content_filter_deny_data()
 	{
 		$logs = array();
+		$message = '';
 		$this->lang->load('content_filter');
 		$this->load->library('content_filter/DansGuardian');		
 		$reports = $this->dansguardian->get_tail_report();
@@ -100,10 +110,11 @@ class Content_Filter_Dashboard extends ClearOS_Controller
 		}
 		if(!$reports)
 		{
-			$error = lang('content_filter_deny_report_no_log');
+			$message = lang('content_filter_deny_report_no_log');
 		}
 		$data['success'] = true;
 		$data['logs'] = $logs;
+		$data['message'] = $message;
 		echo json_encode($data); die;
 	}
 }

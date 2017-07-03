@@ -69,7 +69,16 @@ echo "    					var html = '<tr><td>'+val.ip_address+'</td><td>'+val.group+'</td>
 echo "    				$('.body_content_filter_deny').append(html); \n";
 echo "    			});\n";
 echo "    		}\n";
+echo "    		if(data.message){\n";
+echo "    			var html = '<tr><td class=\"dataTables_empty\" colspan=\"3\">No Log Record !</td></tr>'; \n";
+echo "    			$('.body_content_filter_deny').html(data.message); \n";
+echo "    		}\n";
 echo "    	});\n";
 echo "  }\n";
 echo "</script>\n";
+echo "<style>\n";
+echo "	#ci_content_filter-content_filter_dashboard-content_filter_deny{ \n";
+echo "		max-height:300px; overflow-x:hidden;\n";
+echo "	}\n";
+echo "</style>\n";
 

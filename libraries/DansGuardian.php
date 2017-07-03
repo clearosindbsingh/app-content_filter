@@ -1696,7 +1696,6 @@ class DansGuardian extends Daemon
 		"/usr/bin/tail","tail -n 5000 $log_file_path | grep DENIED", true, $options
         );
         $output = $shell->get_output();
-	//echo "<pre>"; print_r($output); die;
 	return $output;
     }
 
