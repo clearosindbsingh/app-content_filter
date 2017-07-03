@@ -1,7 +1,7 @@
 <?php
 /**
  * Content filter dashboard controller.
- *
+ * // Test comment
  * @category   apps
  * @package    content-filter
  * @subpackage controllers
@@ -71,6 +71,39 @@ class Content_Filter_Dashboard extends ClearOS_Controller
 		$data['maxchildren'] = $this->dansguardian->get_maxchildren();
 		$data['currentprocess'] = $this->dansguardian->get_current_process_count();
 		$data['success'] = true;
+		echo json_encode($data); die;
+	}
+	function content_filter_deny()
+	{
+		$this->lang->load('content_filter');
+		$this->load->library('content_filter/DansGuardian');		
+		//$data['maxchildren'] = $this->dansguardian->get_tail_report();
+		$this->page->view_form('content_filter/dashboard/content_filter_deny', $data);
+	}
+	function refresh_content_filter_deny_data()
+	{
+		$logs = array();
+		$this->lang->load('content_filter');
+		$this->load->library('content_filter/DansGuardian');		
+		$reports = $this->dansguardian->get_tail_report();
+		foreach($reports as $key => $value)
+		{
+			preg_match('/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/', $value, $ip_matches);
+			preg_match('#\bhttps?://[^,\s()<>]+(?:\([\w\d]+\)|([^,[:punct:]\s]|/))#', $value, $url_match);
+			$banned_explode_1 = explode("*DENIED*",$value);
+			$banned_explode_2 = explode(":",$banned_explode_1[1]);
+			$logs[$key]['group'] = trim($banned_explode_2[0]);
+			$logs[$key]['ip_address'] = $ip_matches[0];
+			$logs[$key]['website_url'] = $url_match[0];
+			if($key > 10)
+				break;
+		}
+		if(!$reports)
+		{
+			$error = lang('content_filter_deny_report_no_log');
+		}
+		$data['success'] = true;
+		$data['logs'] = $logs;
 		echo json_encode($data); die;
 	}
 }

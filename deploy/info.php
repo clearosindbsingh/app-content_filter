@@ -83,6 +83,10 @@ $app['dashboard_widgets'] = array(
         'content_filter/content_filter_dashboard/thread_report' => array(
             'title' => "Thread Report",
             'restricted' => FALSE,
+        ),
+	'content_filter/content_filter_dashboard/content_filter_deny' => array(
+            'title' => "Filter Deny",
+            'restricted' => FALSE,
         )
     )
 );

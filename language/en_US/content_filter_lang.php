@@ -159,3 +159,5 @@ $lang['content_filter_thread_report'] = "Content Filter Threads";
 $lang['content_filter_max_children'] = "Max Threads";
 $lang['content_filter_current_process'] = "Threads";
 $lang['content_filter_ooops'] = "Ooops!! Something is wrong";
+$lang['content_filter_deny_report'] = "Deny Report";
+$lang['content_filter_deny_report_no_log'] = "Sorry! No data available in this report";

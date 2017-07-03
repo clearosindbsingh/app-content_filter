@@ -130,6 +130,7 @@ class DansGuardian extends Daemon
     const PATH_PHRASELISTS = '/etc/dansguardian-av/lists/phraselists';
     const PATH_LOCALE = '/etc/dansguardian-av/languages';
     const PATH_LOGS = '/var/log/dansguardian';
+    const PATH_ACCESS_LOG_FILE = '/var/log/dansguardian-av/access.log';
     const FILE_APP_CONFIG = '/etc/clearos/content_filter.conf';
     const FILE_CONFIG = '/etc/dansguardian-av/dansguardian.conf';
     const FILE_CONFIG_FILTER_GROUP = '/etc/dansguardian-av/dansguardianf%d.conf';
@@ -1677,6 +1678,27 @@ class DansGuardian extends Daemon
         	throw new Engine_Exception(lang('content_filter_ooops'));
         $output = $shell->get_output();
 	return $output[0];
+    }
+
+	/**
+     * Returns Denied log Array.
+     *
+     * @return number of log lines
+     * @throws Engine_Exception
+     */
+	public function get_tail_report()
+    {
+	clearos_profile(__METHOD__, __LINE__);
+	$log_file_path = self::PATH_ACCESS_LOG_FILE;
+	$shell = new Shell();
+        $options['validate_exit_code'] = FALSE;
+        $retval = $shell->execute(
+            "/usr/bin/tail","tail -n 5000 $log_file_path | grep www", true, $options
+		//"/usr/bin/tail","tail -n 5000 $log_file_path | grep DENIED", true, $options
+        );
+        $output = $shell->get_output();
+	//echo "<pre>"; print_r($output); die;
+	return $output;
     }
 
     /**
